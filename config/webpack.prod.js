@@ -8,8 +8,7 @@ const domain = "https://d2xe91n4zwx6dq.cloudfront.net"
 const prodConfig = {
     mode: 'production',
     output: {
-        filename: "[name].[contenthash].js",
-        publicPath: `${domain}/${packageJSON.name}/latest/`
+        filename: "[name].[contenthash].js"
     },
     plugins: [
         new ModuleFederationPlugin({
