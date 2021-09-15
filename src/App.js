@@ -4,8 +4,6 @@ import {StylesProvider} from '@material-ui/core'
 
 export default () => {
     return <div>
-        <StylesProvider>
             Hello
-        </StylesProvider>
     </div>
 }
