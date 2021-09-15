@@ -7,7 +7,7 @@ const prodConfig = {
     mode: 'production',
     output: {
         filename: "[name].[contenthash].js",
-        publicPath: `${packageJSON.name}/latest/`
+        publicPath: `${packageJSON.name}/lfatest/`
     },
     plugins: [
         new ModuleFederationPlugin({
