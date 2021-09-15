@@ -3,11 +3,13 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 const commonConfig = require('./webpack.common')
 const packageJSON = require('../package.json')
 
+const domain = "https://d2xe91n4zwx6dq.cloudfront.net"
+
 const prodConfig = {
     mode: 'production',
     output: {
         filename: "[name].[contenthash].js",
-        publicPath: `${packageJSON.name}/latest/`
+        publicPath: `${domain}/${packageJSON.name}/latest/`
     },
     plugins: [
         new ModuleFederationPlugin({
