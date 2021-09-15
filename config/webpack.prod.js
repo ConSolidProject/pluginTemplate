@@ -8,11 +8,12 @@ const domain = process.env.PRODUCTION_DOMAIN
 const prodConfig = {
     mode: 'production',
     output: {
-        filename: "[name].[contenthash].js"
+        filename: "[name].[contenthash].js",
+        publicPath: `${packageJSON.name}/latest/`
     },
     plugins: [
         new ModuleFederationPlugin({
-            name: 'resourcemanager',
+            name: packageJSON.name,
             filename: 'remoteEntry.js',
             exposes: {
                 "./index": "./src/bootstrap"
