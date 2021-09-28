@@ -3,14 +3,18 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin')
 const commonConfig = require('./webpack.common');
 const packageJSON = require('../package.json')
+const deps = packageJSON.dependencies
 
 const devConfig = {
   mode: 'development',
+  output: {
+    publicPath: `http://localhost:${packageJSON.port}/`
+  },
   devServer: {
     port: packageJSON.port,
     historyApiFallback: {
       index: 'index.html',
-    },
+    }
   },
   plugins: [
     new ModuleFederationPlugin({
@@ -19,7 +23,25 @@ const devConfig = {
         exposes: {
             "./index": "./src/bootstrap"
         },
-        shared: {...packageJSON.dependencies}
+        shared: {
+          ...packageJSON.dependencies,
+          react: {
+            singleton: true,
+            requiredVersion: deps.react,
+          },
+          "react-dom": {
+            singleton: true,
+            requiredVersion: deps["react-dom"],
+          },
+          "@material-ui/core": {
+            singleton: true,
+            requiredVersion: deps["@material-ui/core"],
+          },
+          "@material-ui/icons": {
+            singleton: true,
+            requiredVersion: deps["@material-ui/icons"],
+          },
+          events: {eager: true, requiredVersion: deps.events}}
     })
   ],
 };

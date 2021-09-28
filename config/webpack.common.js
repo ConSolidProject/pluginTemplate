@@ -1,6 +1,30 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require("webpack");
 
 module.exports = {
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"],
+    symlinks: false,
+    modules: [
+      'node_modules',
+      'app'
+    ],
+    fallback: {
+      crypto: require.resolve("crypto-browserify"),
+      stream: require.resolve("stream-browserify"),
+      util: require.resolve("util/"),
+      process: require.resolve("process/browser"),
+      buffer: require.resolve("buffer/"),
+      os: require.resolve("os-browserify/browser"),
+      assert: require.resolve("assert/"),
+      zlib: require.resolve("browserify-zlib"),
+      events: require.resolve("events/"),
+      path: require.resolve("path-browserify"),
+    },
+    alias: {
+      consolid: "/home/jmauwerb/Documents/LBDserver/consolid"
+    }
+  },
     module: {
       rules: [
         {
@@ -20,6 +44,12 @@ module.exports = {
       new HtmlWebpackPlugin({
         template: './public/index.html',
       }),
-    ]
+      new webpack.ProvidePlugin({
+        process: "process/browser",
+      }),
+      new webpack.ProvidePlugin({
+        stream: "stream-browserify",
+      })
+    ],
   };
   
