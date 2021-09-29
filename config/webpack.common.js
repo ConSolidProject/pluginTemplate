@@ -1,13 +1,13 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require("webpack");
+const path = require('path')
 
 module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
     symlinks: false,
     modules: [
-      'node_modules',
-      'app'
+      'node_modules'
     ],
     fallback: {
       crypto: require.resolve("crypto-browserify"),
@@ -19,10 +19,7 @@ module.exports = {
       assert: require.resolve("assert/"),
       zlib: require.resolve("browserify-zlib"),
       events: require.resolve("events/"),
-      path: require.resolve("path-browserify"),
-    },
-    alias: {
-      consolid: "/home/jmauwerb/Documents/LBDserver/consolid"
+      path: require.resolve("path-browserify")
     }
   },
     module: {
