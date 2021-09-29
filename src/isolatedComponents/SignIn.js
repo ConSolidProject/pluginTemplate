@@ -94,18 +94,19 @@ export default function SignIn() {
         <Container component="main">
           {getDefaultSession().info.isLoggedIn ? (
             <div>
+              <p>Welcome! Your are logged in as:</p>
+              <a style={{ fontSize: 12}} href={getDefaultSession().info.webId}>
+                {getDefaultSession().info.webId}
+              </a>
               <Button
                 fullWidth
                 variant="contained"
                 color="primary"
                 onClick={onLogoutClick}
+                style={{marginTop: 20}}
               >
                 Sign out
               </Button>
-              <p>Your are logged in as:</p>
-              <a href={getDefaultSession().info.webId}>
-                {getDefaultSession().info.webId}
-              </a>
             </div>
           ) : (
             <div>

@@ -14,19 +14,20 @@ import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import ChevronRight from "@material-ui/icons/ChevronRight";
 import SignIn from "./SignIn";
 
-const drawerWidth = 400
+const drawerWidth = 450
 
 
 const useStyles = makeStyles({
   paper: {
     width: drawerWidth,
+    backgroundColor: "lightGray"
   },
 });
 
 export default function IsolatedSideBar() {
   const classes = useStyles();
   const [drawerOpened, setDrawerOpened] = useState(true);
-  const [authOpened, setAuthOpened] = useState(false);
+  const [authOpened, setAuthOpened] = useState(true);
 
   return (
     <div>
@@ -36,10 +37,11 @@ export default function IsolatedSideBar() {
         color="primary"
         onClick={() => setDrawerOpened(!drawerOpened)}
       >
-        {drawerOpened ? <ChevronRight /> : <ChevronLeft />}
+        {drawerOpened ? <></> : <ChevronLeft />}
       </IconButton>
       <React.Fragment>
         <Drawer
+          backgroundColor="gray"
           anchor={"right"}
           open={drawerOpened}
           onClose={() => setDrawerOpened(!drawerOpened)}
@@ -53,7 +55,8 @@ export default function IsolatedSideBar() {
             <br/>
             <Typography variant="body1">Visit <a target="_blank" href="https://lbdserver.org">https://lbdserver.org</a> for more information.</Typography>
             </div>
-          <Accordion>
+            <div>
+          <Accordion style={{margin: 10}} expanded={authOpened} onChange={() => setAuthOpened(!authOpened)} >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -64,7 +67,9 @@ export default function IsolatedSideBar() {
             <AccordionDetails>
                 <SignIn/>
             </AccordionDetails>
-          </Accordion>{" "}
+          </Accordion>
+          
+          </div>
         </Drawer>
       </React.Fragment>
     </div>
