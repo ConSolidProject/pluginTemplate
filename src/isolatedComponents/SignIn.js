@@ -45,6 +45,7 @@ export default function SignIn() {
 
   // this function only runs when the component mounts. If the mount is the result of a redirect from a Solid Identity Provider, the Session is verified and extracted, and the user is authenticated.
   useEffect(() => {
+    console.log(`window.location`, window.location)
     setLoading(true);
     getAuthentication(session).then((s) => {setSession(s); setLoading(false)});
   }, []);
@@ -112,7 +113,7 @@ export default function SignIn() {
                   color="primary"
                   onClick={onLoginClick}
                 >
-                  {session.info.isLoggedIn ? "Log out" : "Sign in"}
+                  {session.info.isLoggedIn ? "Log out" : "Log in"}
                 </Button>
               </form>
             </div>
