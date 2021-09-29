@@ -1,6 +1,12 @@
 import {atom, atomFamily, selectorFamily} from 'recoil'
 import {Session} from "@inrupt/solid-client-authn-browser"
 
+const N3 = require("n3");
+const session = atom({
+    key: "session",
+    default: new Session()
+})
+
 const projects = atom({
     key: "projects",
     default: ["http://localhost:5000/jeroen/lbd/642f0417-ce23-4d9d-8806-c078aed93ae1/"]
@@ -26,4 +32,9 @@ const trigger = atom({
     default: '0'
 })
 
-export {projects, activeResources, selectedElements, selectionId, trigger}
+const store = atom({
+    key: "store", 
+    default: new N3.Store()
+})
+
+export {session, projects, activeResources, selectedElements, selectionId, trigger, store}

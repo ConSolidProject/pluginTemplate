@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import Isolated from "./isolatedComponents";
+import Isolated from "./isolatedComponents/";
 
 const packageJSON = require("../package.json");
 

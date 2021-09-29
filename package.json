@@ -1,7 +1,9 @@
 {
-  "name": "resourcemanager",
+  "name": "template",
   "version": "1.0.0",
-  "port": 8081,
+  "port": 8080,
+  "domain": "https://consolidproject.github.io/pluginTemplate/",
+
   "scripts": {
     "start": "webpack serve --config config/webpack.dev.js",
     "build": "webpack --config config/webpack.prod.js"
@@ -15,6 +17,7 @@
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "consolid": "^1.0.1",
+    "consolid-react-ui": "0.0.8",
     "crypto-browserify": "^3.12.0",
     "events": "^3.3.0",
     "fetch-sparql-endpoint": "^2.3.1",
