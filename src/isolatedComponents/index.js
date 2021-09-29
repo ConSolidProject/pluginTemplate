@@ -67,7 +67,7 @@ function standaloneRunner(WrappedComponent, module) {
       trigger,
       setTrigger,
       store
-    };
+    }; 
 
     const children = null;
     const inactive = false;
