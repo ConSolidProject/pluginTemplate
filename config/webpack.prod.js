@@ -3,7 +3,7 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 const commonConfig = require('./webpack.common')
 const packageJSON = require('../package.json')
 
-const domain = "https://consolidproject.github.io/pluginTemplate/"
+const domain = "https://consolidproject.github.io/pluginTemplate"
 
 const prodConfig = {
     mode: 'production',

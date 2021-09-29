@@ -9,7 +9,7 @@ import {
   session as sess,
 } from "./atoms";
 import { useRecoilState, RecoilRoot, useRecoilValue } from "recoil";
-import SignIn from "./isolatedComponents/SignIn";
+import IsolatedSideBar from "./isolatedComponents";
 import { QueryClientProvider, QueryClient } from "react-query";
 
 const packageJSON = require("../package.json");
@@ -51,31 +51,9 @@ const IsolatedComponent = (props) => {
 
   const Application = standaloneRunner(App, props.module);
 
-  // async function doActivity() {
-  //   const lbd = await getLBDlocation(session.info.webId, session);
-  //   const myProjects = await getProjectsFromAggregator(lbd, session);
-
-  //   for (const proj of myProjects) {
-  //     const stakeholder = await getStakeholdersFromProject(proj, session);
-  //     const authorisedResources = await getAuthorisedFilesInRepository(
-  //       proj,
-  //       session
-  //     );
-  //     console.log(`authorisedResources`, authorisedResources);
-  //   }
-  // }
-
-  const fetchResource = async () => {
-    const url =
-      "http://localhost:5000/jeroen/lbd/642f0417-ce23-4d9d-8806-c078aed93ae1/";
-    const data = await session.fetch(url);
-    const text = await data.text();
-    console.log(`text`, text);
-  };
-
   return (
     <div>
-      <SignIn />
+      <IsolatedSideBar />
       <Application />
     </div>
   );
