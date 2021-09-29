@@ -24,14 +24,6 @@ export default (props) => {
     setSession(() => getDefaultSession())
   }, [trigger])
 
-
-  async function fetchData() {
-    const q = "INSERT DATA {<s> <p> <o> .}"
-    const graph = "http://localhost:5000/jeroen/lbd/642f0417-ce23-4d9d-8806-c078aed93ae1/artefactRegistry.ttl"
-    await update(q, graph, getDefaultSession())
-  }
-
-
   if (inactive) return <></>
   return (
       <StylesProvider generateClassName={generateClassname}>
