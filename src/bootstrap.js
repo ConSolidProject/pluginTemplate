@@ -1,9 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import Isolated from "./Isolated";
-import {RecoilRoot} from 'recoil'
-import { QueryClientProvider, QueryClient } from "react-query";
+import Isolated from "./isolatedComponents";
 
 const packageJSON = require("../package.json");
 

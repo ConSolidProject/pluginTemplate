@@ -1,72 +1,94 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import App from "../App";
 import {
-  Drawer,
-  Button,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-  IconButton,
-  makeStyles,
-} from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import SignIn from "./SignIn";
+  projects as p,
+  activeResources as sel,
+  selectedElements as se,
+  selectionId as sId,
+  trigger as t,
+} from "../atoms";
+import { useRecoilState, RecoilRoot, useRecoilValue } from "recoil";
+import IsolatedSideBar from "./Isolated";
+import { QueryClientProvider, QueryClient } from "react-query";
 
-const drawerWidth = 400
+const packageJSON = require("../../package.json");
 
+export default function Isolated() {
+  const module = {
+    url: "http://example.org/remoteEntry.js", // can be safely changed
+    scope: packageJSON.name, // don't change
+    label: packageJSON.name, // can be safely changed
+    module: "./index", // don't change
+    dimensions: {
+      // can be safely changed
+      x: 0,
+      y: 0,
+      h: 850,
+      w: 400,
+    },
+  };
 
-const useStyles = makeStyles({
-  paper: {
-    width: drawerWidth,
-  },
-});
+  // if you want to include more in the standalone Application than in the federated module, you should change 'App' to a component with extra functionality (still with App as a child component, though...)
 
-export default function IsolatedSideBar() {
-  const classes = useStyles();
-  const [drawerOpened, setDrawerOpened] = useState(true);
-  const [authOpened, setAuthOpened] = useState(false);
+  return (
+    <div style={{ width: module.dimensions.w, height: module.dimensions.h }}>
+      <RecoilRoot>
+        <QueryClientProvider client={new QueryClient()}>
+          <IsolatedComponent module={module} />
+        </QueryClientProvider>
+      </RecoilRoot>
+    </div>
+  );
+}
+
+const IsolatedComponent = (props) => {
+  const [idp, setIdp] = useState("http://localhost:5000");
+  const [currentUrl, setCurrentUrl] = useState("https://localhost:8081");
+  useEffect(() => {
+    setCurrentUrl(window.location.href);
+  }, [setCurrentUrl]);
+
+  const Application = standaloneRunner(App, props.module);
 
   return (
     <div>
-      <IconButton
-        style={{ position: "absolute", right: (drawerOpened && drawerWidth) || 0}}
-        variant="contained"
-        color="primary"
-        onClick={() => setDrawerOpened(!drawerOpened)}
-      >
-        {drawerOpened ? <ChevronRight /> : <ChevronLeft />}
-      </IconButton>
-      <React.Fragment>
-        <Drawer
-          anchor={"right"}
-          open={drawerOpened}
-          onClose={() => setDrawerOpened(!drawerOpened)}
-          classes={{ paper: classes.paper }}
-        >
-            <div style={{margin: 20}}>
-            <Typography variant="h6">Welcome to the LBDserver plugin demo</Typography>
-            <hr/>
-            <Typography variant="body1">This drawer allows you to authenticate to a Solid IDP, to choose a consolid project and develop your plugin independent from a main container application.</Typography>
-            <br/>
-            <br/>
-            <Typography variant="body1">Visit <a target="_blank" href="https://lbdserver.org">https://lbdserver.org</a> for more information.</Typography>
-            </div>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Authentication</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-                <SignIn/>
-            </AccordionDetails>
-          </Accordion>{" "}
-        </Drawer>
-      </React.Fragment>
+      <IsolatedSideBar />
+      <Application />
     </div>
   );
+};
+
+function standaloneRunner(WrappedComponent, module) {
+  return function Wrapped() {
+    const [activeResources, setActiveResources] = useRecoilState(sel);
+    const [selectedElements, setSelectedElements] = useRecoilState(se);
+    const [projects, setProjects] = useRecoilState(p);
+    const [selectionId, setSelectionId] = useRecoilState(sId);
+    const [trigger, setTrigger] = useRecoilState(t);
+    const sharedProps = {
+      projects,
+      setProjects,
+      activeResources,
+      setActiveResources,
+      selectedElements,
+      setSelectedElements,
+      selectionId,
+      setSelectionId,
+      trigger,
+      setTrigger
+    };
+
+    const children = null;
+    const inactive = false;
+
+    return (
+      <WrappedComponent
+        sharedProps={sharedProps}
+        module={module}
+        children={children}
+        inactive={inactive}
+      />
+    );
+  };
 }

@@ -17,9 +17,9 @@ import {
 import { trigger as t, session as sess } from "../atoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 
-async function getAuthentication(session) {
+async function getAuthentication() {
   try {
-    if (!session.info.isLoggedIn) {
+    if (!getDefaultSession().info.isLoggedIn) {
       const params = new URLSearchParams(window.location.search);
       const solidCode = params.get("code");
       if (solidCode) {
@@ -30,33 +30,27 @@ async function getAuthentication(session) {
         await handleIncomingRedirect({ restorePreviousSession: true });
       }
     }
-    const sess = await getDefaultSession();
-    return sess;
+    return getDefaultSession();
   } catch (error) {
     console.log(`error`, error);
   }
 }
 
 export default function SignIn() {
-  const [session, setSession] = useRecoilState(sess);
-  const [trigger, setTrigger] = useRecoilState(t);
   const [oidcIssuer, setOidcIssuer] = useState("http://localhost:5000");
   const [loading, setLoading] = useState(false);
-
+  const [trigger, setTrigger] = useRecoilState(t);
   // this function only runs when the component mounts. If the mount is the result of a redirect from a Solid Identity Provider, the Session is verified and extracted, and the user is authenticated.
   useEffect(() => {
-    setLoading(true);
-    getAuthentication(session).then((s) => {
-      setSession(() => s);
-      
-    }).then(() => setLoading(false));
+    getAuthentication().then((s) => setTrigger((t) => t + 1));
+    console.log(`getDefaultSession()`, getDefaultSession());
   }, []);
 
   // This function is called when the login button is clicked. If the user logs in as a guest, an unauthenticated solid session is created.
   const onLoginClick = async (e) => {
     try {
       setLoading(true);
-      if (!session.info.isLoggedIn) {
+      if (!getDefaultSession().info.isLoggedIn) {
         await login({
           oidcIssuer,
           redirectUrl: window.location.href,
@@ -73,16 +67,14 @@ export default function SignIn() {
     try {
       // await getMyProjects()
       setLoading(true);
-      try {
-        await session.logout();
-        setTrigger((t) => t + 1);
-      } catch (error) {
-        if (session.info.isLoggedIn) {
-          localStorage.clear();
-          setSession(new Session());
-        }
-      }
-
+      const sess = getDefaultSession();
+      await sess.logout();
+      const s = await getAuthentication();
+      setTrigger((t) => t + 1);
+      //   if (session.info.isLoggedIn) {
+      //     localStorage.clear();
+      //     setSession(new Session());
+      //   }
       setLoading(false);
     } catch (error) {
       console.log(`error`, error);
@@ -100,25 +92,43 @@ export default function SignIn() {
         />
       ) : (
         <Container component="main">
-          {session && session.info && session.info.isLoggedIn ? (
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={onLogoutClick}
-            >
-              Sign out
-            </Button>
+          {getDefaultSession().info.isLoggedIn ? (
+            <div>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={onLogoutClick}
+              >
+                Sign out
+              </Button>
+              <p>Your are logged in as:</p>
+              <a href={getDefaultSession().info.webId}>
+                {getDefaultSession().info.webId}
+              </a>
+            </div>
           ) : (
             <div>
               <form onSubmit={(e) => e.preventDefault()} noValidate>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  value={oidcIssuer}
+                  onChange={(e) => setOidcIssuer(e.target.value)}
+                  id="idp"
+                  label="Identity Provider"
+                  name="idp"
+                  autoFocus
+                />
                 <Button
                   fullWidth
                   variant="contained"
                   color="primary"
                   onClick={onLoginClick}
                 >
-                  {session && session.info.isLoggedIn ? "Log out" : "Log in"}
+                  Sign in
                 </Button>
               </form>
             </div>
