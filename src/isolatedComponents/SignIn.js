@@ -56,7 +56,7 @@ export default function SignIn() {
     if (!session.info.isLoggedIn) {
       await login({
         oidcIssuer,
-        redirectUrl: window.location.origin + "/",
+        redirectUrl: window.location.href + "/",
         clientName: "lbdserver",
       });
     }
