@@ -17,7 +17,7 @@ export default function StakeholderMapping({ sharedProps }) {
     <div>
       {Object.keys(resources).map((item) => {
         return (
-          <div key={item}>
+          <div style={{marginBottom: 20}} key={item}>
             <Typography>{item}: </Typography>
             {resources[item].map((res) => {
               return (
