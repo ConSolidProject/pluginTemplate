@@ -17,7 +17,7 @@ const packageJSON = require("../../package.json");
 
 export default function Isolated() {
   const module = {
-    url: "http://example.org/remoteEntry.js", // can be safely changed
+    url: packageJSON.domain,
     scope: packageJSON.name, // don't change
     label: packageJSON.name, // can be safely changed
     module: "./index", // don't change
@@ -91,6 +91,7 @@ function standaloneRunner(WrappedComponent, module) {
           projects={projects}
           setProjects={setProjects}
           store={store}
+          drawerWidth={"25%"}
         />{" "}
         <WrappedComponent
           sharedProps={sharedProps}
